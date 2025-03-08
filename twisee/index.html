@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TwiSee Auth Redirect</title>
+    <script>
+        window.onload = function() {
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            const accessToken = params.get("access_token");
+
+            console.log("Extracted token:", accessToken); // проверка, есть ли токен
+
+            if (accessToken) {
+                document.body.innerHTML = "<h1>Success! Redirecting...</h1>";
+                setTimeout(() => {
+                    window.location.href = `twisee://auth?token=${accessToken}`;
+                }, 1000);
+            } else {
+                document.body.innerHTML = "<h1>Ошибка авторизации</h1><p>Токен не найден!</p>";
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Authenticating...</h1>
+</body>
+</html>
