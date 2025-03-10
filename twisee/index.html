@@ -5,23 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TwiSee Auth Redirect</title>
     <script>
-        window.onload = function() {
-            const hash = window.location.hash.substring(1);
-            const params = new URLSearchParams(hash);
-            const accessToken = params.get("access_token");
+    window.onload = function() {
+        const hash = window.location.hash.substring(1);
+        console.log("Full hash fragment:", hash); // лог ввсего хеша
 
-            console.log("Extracted token:", accessToken); // проверка, есть ли токен
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get("access_token");
 
-            if (accessToken) {
-                document.body.innerHTML = "<h1>Success! Redirecting...</h1>";
-                setTimeout(() => {
-                    window.location.href = `intent://open#Intent;scheme=twisee;package=com.example.twisee;end`;
-                }, 1000);
-            } else {
-                document.body.innerHTML = "<h1>Ошибка авторизации</h1><p>Токен не найден!</p>";
-            }
-        };
-    </script>
+        console.log("Extracted token:", accessToken); // проверка, есть ли токен
+
+        if (accessToken) {
+            document.body.innerHTML = "<h1>Success! Redirecting...</h1>";
+            setTimeout(() => {
+                const intentUri = `intent://open#Intent;scheme=twisee;package=com.example.twisee;S.access_token=${accessToken};end`;
+                console.log("Redirecting to:", intentUri); // лог редиректа
+                window.location.href = intentUri;
+            }, 1000);
+        } else {
+            document.body.innerHTML = "<h1>Ошибка авторизации</h1><p>Токен не найден.</p>";
+        }
+    };
+</script>
 </head>
 <body>
     <h1>Authenticating...</h1>
